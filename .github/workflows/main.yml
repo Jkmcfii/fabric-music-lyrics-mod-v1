@@ -16,14 +16,20 @@ jobs:
   build:
     name: Build Minecraft mod jar
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out source
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Verify Gradle project exists
+      - name: Ensure Gradle project files exist
+        shell: bash
         run: |
-          if [ ! -f build.gradle ] && [ ! -f build.gradle.kts ] && [ ! -f settings.gradle ] && [ ! -f settings.gradle.kts ]; then
-            echo "This repository does not contain a Gradle/Fabric mod project yet. Add build.gradle, settings.gradle, gradle.properties, and the mod source files before building a jar."
+          if [ ! -f build.gradle ] && [ ! -f build.gradle.kts ]; then
+            echo "Missing build.gradle / build.gradle.kts. Add the Fabric mod project files before running this workflow."
+            exit 1
+          fi
+          if [ ! -f settings.gradle ] && [ ! -f settings.gradle.kts ]; then
+            echo "Missing settings.gradle / settings.gradle.kts. Add the Gradle settings file before running this workflow."
             exit 1
           fi
 
@@ -38,21 +44,20 @@ jobs:
         with:
           gradle-version: '9.2.1'
 
-      - name: Build mod
+      - name: Build the mod
+        shell: bash
         run: |
-          if [ -f ./gradlew ]; then
-            chmod +x ./gradlew
+          if [ -x ./gradlew ]; then
             ./gradlew --no-daemon build
           else
             gradle --no-daemon build
           fi
 
-      - name: Upload mod jar
+      - name: Upload built jar artifact
         uses: actions/upload-artifact@v4
         with:
           name: minecraft-fabric-mod
           path: |
             build/libs/*.jar
-            !build/libs/*-sources.jar
           if-no-files-found: error
           retention-days: 30
