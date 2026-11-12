@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "fabric-music-lyrics-mod-v1",
+  "version": "${version}",
+  "name": "Fabric Music Lyrics Mod",
+  "description": "Fabric mod for playing and searching music with floating lyrics and a stylized HUD.",
+  "authors": [
+    "Jkmcfii"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Jkmcfii/fabric-music-lyrics-mod-v1"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.jkmcfii.fabricmusiclyricsmod.FabricMusicLyricsMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "~1.21.1",
+    "java": ">=21"
+  }
+}
